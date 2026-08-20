@@ -24,7 +24,7 @@
 </head>
 <body>
 <main>
-    <nav><a href="<?= site_url('student') ?>">MS / 26</a><a href="<?= site_url('student') ?>">Home</a></nav>
+    <nav><a href="<?= site_url('student') ?>">MCC2024 / 00140</a><a href="<?= site_url('student') ?>">Home</a></nav>
     <p class="kicker">Verified student profile</p>
     <h1><?= htmlspecialchars($student['name'], ENT_QUOTES, 'UTF-8') ?></h1>
     <dl>
