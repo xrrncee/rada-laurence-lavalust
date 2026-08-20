@@ -7,7 +7,7 @@ class StudentController extends Controller
     {
         return [
             'student_id' => 'MCC2024-00140',
-            'name' => 'John Laurence Rada',
+            'name' => 'John Laurence C. Rada',
             'course' => 'BS Information Technology',
             'year' => '3rd Year',
             'section' => '3F3',
