@@ -26,9 +26,8 @@
 <body>
 <main>
     
-    <p class="eyebrow"></p>
+    
     <h1>User records</h1>
-    <p class="intro"></p>
     <div class="table-wrap">
         <table>
             <thead>
