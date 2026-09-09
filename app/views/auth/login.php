@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Desk | Login</title>
+    <title>Product | Login</title>
     <style>
         :root { --ink:#17221f; --paper:#f4f0e8; --accent:#d9573f; --line:#c9c0b2; }
         * { box-sizing:border-box; } body { margin:0; min-height:100vh; display:grid; place-items:center; color:var(--ink); background:radial-gradient(circle at 10% 10%, #e7c9a5, transparent 34%), var(--paper); font-family:Georgia, serif; }
@@ -12,11 +12,11 @@
     </style>
 </head>
 <body><main>
-    <div class="eyebrow">LavaLust / Product Desk</div><h1>Sign in.</h1>
+    <div class="eyebrow"></div><h1>Sign in First.</h1>
     <?php if ($error): ?><p class="error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p><?php endif; ?>
     <form method="post" action="<?= base_url('login') ?>">
         <label for="username">Username</label><input id="username" name="username" required autofocus>
         <label for="password">Password</label><input id="password" type="password" name="password" required>
-        <button type="submit">Open product desk</button>
+        <button type="submit">Login</button>
     </form>
 </main></body></html>
