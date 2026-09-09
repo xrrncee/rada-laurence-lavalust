@@ -232,6 +232,16 @@ Modern frameworks often add layers of abstraction that benefit large enterprise 
 
 ## Documentation
 
+### Product CRUD deployment
+
+Copy `.env.example` to `.env` for local development. Set `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the Aiven MySQL values. Set `APP_KEY` to a long random value and generate an administrator password hash with:
+
+```bash
+php -r "echo password_hash('change-this-password', PASSWORD_DEFAULT), PHP_EOL;"
+```
+
+Put that output in `ADMIN_PASSWORD_HASH` and set `ADMIN_USERNAME`. Run the migration from the project root with `php lava migrate`. On Render, configure the same variables in the service Environment settings and use the `public` directory as the document root. Never commit `.env` or database credentials.
+
 Full documentation is available at **[https://lavalust.netlify.app](https://lavalust.netlify.app)**
 
 Topics covered include:
