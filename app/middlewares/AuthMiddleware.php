@@ -5,7 +5,12 @@ class AuthMiddleware
 {
     public function handle(Closure $next)
     {
-        if (empty($_SESSION['authenticated'])) {
+        $role = (string) ($_SESSION['role'] ?? '');
+        $username = (string) getenv(strtoupper($role) . '_USERNAME');
+        $hash = (string) getenv(strtoupper($role) . '_PASSWORD_HASH');
+        $fingerprint = hash('sha256', $role . '|' . $username . '|' . $hash);
+
+        if (empty($_SESSION['authenticated']) || !in_array($role, ['admin', 'user'], true) || empty($_SESSION['auth_fingerprint']) || !hash_equals($fingerprint, $_SESSION['auth_fingerprint'])) {
             redirect('login');
             exit;
         }

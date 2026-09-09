@@ -57,9 +57,11 @@ $router->group(['middleware' => 'student_access'], function ($router) {
 
 $router->group(['middleware' => 'auth'], function ($router) {
 	$router->get('/products', 'ProductsController::index');
+	$router->group(['middleware' => 'admin'], function ($router) {
 	$router->get('/products/create', 'ProductsController::create');
 	$router->post('/products', 'ProductsController::store');
 	$router->get('/products/edit/{id}', 'ProductsController::edit');
 	$router->post('/products/edit/{id}', 'ProductsController::update');
 	$router->post('/products/delete/{id}', 'ProductsController::delete');
+	});
 });

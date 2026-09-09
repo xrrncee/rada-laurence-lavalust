@@ -16,17 +16,43 @@ class AuthController extends Controller
 
     public function authenticate()
     {
-        $username = trim((string) $this->io->post('username'));
-        $password = (string) $this->io->post('password');
-        $hash = (string) getenv('ADMIN_PASSWORD_HASH');
+        $username = isset($_POST['username']) && is_string($_POST['username'])
+            ? trim($_POST['username'])
+            : '';
+        $password = isset($_POST['password']) && is_string($_POST['password'])
+            ? $_POST['password']
+            : '';
+        $accounts = [
+            'admin' => [
+                'username' => (string) getenv('ADMIN_USERNAME'),
+                'hash' => (string) getenv('ADMIN_PASSWORD_HASH'),
+            ],
+            'user' => [
+                'username' => (string) getenv('USER_USERNAME'),
+                'hash' => (string) getenv('USER_PASSWORD_HASH'),
+            ],
+        ];
+        $role = null;
+        $hash = '';
 
-        if ($username !== (string) getenv('ADMIN_USERNAME') || $hash === '' || !password_verify($password, $hash)) {
+        foreach ($accounts as $account_role => $account) {
+            if ($username === $account['username'] && $account['hash'] !== '' && password_verify($password, $account['hash'])) {
+                $role = $account_role;
+                $hash = $account['hash'];
+                break;
+            }
+        }
+
+        if ($role === null) {
             redirect('login?error=1');
+            exit;
         }
 
         session_regenerate_id(true);
         $_SESSION['authenticated'] = true;
         $_SESSION['username'] = $username;
+        $_SESSION['role'] = $role;
+        $_SESSION['auth_fingerprint'] = hash('sha256', $role . '|' . $username . '|' . $hash);
         redirect('products');
     }
 
