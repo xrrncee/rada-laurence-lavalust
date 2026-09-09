@@ -12,7 +12,7 @@
     </style>
 </head>
 <body><main>
-    <div class="eyebrow"></div><h1>Sign in First.</h1>
+    <div class="eyebrow"></div><h1>Sign in.</h1>
     <?php if ($error): ?><p class="error"><?= htmlspecialchars($error, ENT_QUOTES, 'UTF-8') ?></p><?php endif; ?>
     <form method="post" action="<?= base_url('login') ?>">
         <label for="username">Username</label><input id="username" name="username" required autofocus>
