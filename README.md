@@ -232,15 +232,28 @@ Modern frameworks often add layers of abstraction that benefit large enterprise 
 
 ## Documentation
 
-### Product CRUD deployment
+### Product CRUD application
 
-Copy `.env.example` to `.env` for local development. Set `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the Aiven MySQL values. Set `APP_KEY` to a long random value and generate an administrator password hash with:
+Copy `.env.example` to `.env` for local development. Set `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the Aiven MySQL values. Generate separate random values of at least 32 characters for `JWT_SECRET` and `REFRESH_TOKEN_KEY`. Set `API_ALLOW_ORIGIN` to the frontend origin. Generate a password hash for the admin login with:
 
 ```bash
 php -r "echo password_hash('change-this-password', PASSWORD_DEFAULT), PHP_EOL;"
 ```
 
-Put that output in `ADMIN_PASSWORD_HASH` and set `ADMIN_USERNAME`. Run the migration from the project root with `php lava migrate`. On Render, configure the same variables in the service Environment settings and use the `public` directory as the document root. Never commit `.env` or database credentials.
+Put that output in `ADMIN_PASSWORD_HASH` and set `ADMIN_USERNAME`. Database credentials and all signing keys must stay in environment variables; do not commit `.env`.
+
+Run migrations from the project root with `MIGRATION_ENABLED=true` in `.env`:
+
+```bash
+php lava migration status
+php lava migration run
+```
+
+The `MigrationController` routes reject HTTP requests and only serve LavaLust's CLI dispatcher. Turn `MIGRATION_ENABLED` back off after applying schema changes. `rollback-all` and `refresh` drop application tables and should only be used against a development database.
+
+The API accepts `POST /api/login` with `{ "username": "...", "password": "..." }`. Send its returned access token as `Authorization: Bearer <token>` for product operations: `GET/POST /api/products` and `GET/PUT/PATCH/DELETE /api/products/{id}`. Product routes require a valid access token. The browser logout clears its stored token; access tokens remain valid until their configured expiration.
+
+For the React frontend, create a root `.env.local` with `VITE_API_URL=http://127.0.0.1:3000`, start LavaLust with `php lava serve`, then start Vite from the repository root with `npm run dev`. On Render, configure the backend environment variables in the service settings and use the `public` directory as the document root. Build and deploy the Vite frontend separately with `VITE_API_URL` set to the deployed API origin.
 
 Full documentation is available at **[https://lavalust.netlify.app](https://lavalust.netlify.app)**
 

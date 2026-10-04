@@ -51,6 +51,26 @@ $router->get('/login', 'AuthController::login');
 $router->post('/login', 'AuthController::authenticate');
 $router->post('/logout', 'AuthController::logout');
 
+$router->options('/api/login', 'ApiController::preflight');
+$router->options('/api/logout', 'ApiController::preflight');
+$router->options('/api/products', 'ApiController::preflight');
+$router->options('/api/products/{id}', 'ApiController::preflight');
+$router->post('/api/login', 'ApiController::login');
+$router->post('/api/logout', 'ApiController::logout');
+$router->get('/api/products', 'ApiController::index');
+$router->post('/api/products', 'ApiController::store');
+$router->get('/api/products/{id}', 'ApiController::show');
+$router->put('/api/products/{id}', 'ApiController::update');
+$router->patch('/api/products/{id}', 'ApiController::update');
+$router->delete('/api/products/{id}', 'ApiController::delete');
+
+$router->get('/create-migration/{migration_class}', 'MigrationController::create_migration');
+$router->get('/migrate', 'MigrationController::migrate');
+$router->get('/rollback', 'MigrationController::rollback');
+$router->get('/rollback-all', 'MigrationController::rollback_all');
+$router->get('/refresh', 'MigrationController::refresh');
+$router->get('/status', 'MigrationController::status');
+
 $router->group(['middleware' => 'student_access'], function ($router) {
 	$router->get('/student/profile', 'StudentController::profile');
 });
