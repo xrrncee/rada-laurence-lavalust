@@ -251,7 +251,7 @@ php lava migration run
 
 The `MigrationController` routes reject HTTP requests and only serve LavaLust's CLI dispatcher. Turn `MIGRATION_ENABLED` back off after applying schema changes. `rollback-all` and `refresh` drop application tables and should only be used against a development database.
 
-The API accepts `POST /api/login` with `{ "username": "...", "password": "..." }`. Send its returned access token as `Authorization: Bearer <token>` for product operations: `GET/POST /api/products` and `GET/PUT/PATCH/DELETE /api/products/{id}`. Product routes require a valid access token. The browser logout clears its stored token; access tokens remain valid until their configured expiration.
+The API accepts `POST /api/login` with `{ "username": "...", "password": "..." }`. Send its returned access token as `Authorization: Bearer <token>` for product operations: `GET/POST /api/products` and `GET/PUT/PATCH/DELETE /api/products/{id}`. Both configured roles can view products; only the `admin` role can create, update, or delete them. This restriction is enforced by the API as well as by the frontend controls. The browser logout clears its stored token; access tokens remain valid until their configured expiration.
 
 For the React frontend, create a root `.env.local` with `VITE_API_URL=http://127.0.0.1:3000`, start LavaLust with `php lava serve`, then start Vite from the repository root with `npm run dev`. On Render, configure the backend environment variables in the service settings and use the `public` directory as the document root. Build and deploy the Vite frontend separately with `VITE_API_URL` set to the deployed API origin.
 

@@ -29,7 +29,9 @@ class ApiController extends Controller
                 $token = $this->api->encode_jwt([
                     'sub' => $username,
                     'role' => $role,
-                    'scopes' => ['products:read', 'products:write'],
+                    'scopes' => $role === 'admin'
+                        ? ['products:read', 'products:write']
+                        : ['products:read'],
                 ]);
 
                 $this->api->respond([
@@ -71,7 +73,7 @@ class ApiController extends Controller
     public function store()
     {
         $this->api->require_method('POST');
-        $this->api->require_jwt();
+        $this->require_admin();
         $this->load_products();
         $product = $this->validated_product($this->request_body());
 
@@ -86,7 +88,7 @@ class ApiController extends Controller
     public function update($id)
     {
         $this->api->require_method($_SERVER['REQUEST_METHOD']);
-        $this->api->require_jwt();
+        $this->require_admin();
         $this->load_products();
         $existing = $this->find_product($id);
         $product = $this->validated_product($this->request_body(), $existing);
@@ -102,7 +104,7 @@ class ApiController extends Controller
     public function delete($id)
     {
         $this->api->require_method('DELETE');
-        $this->api->require_jwt();
+        $this->require_admin();
         $this->load_products();
         $this->find_product($id);
         $this->ProductsModel->_delete((int) $id);
@@ -113,6 +115,14 @@ class ApiController extends Controller
     {
         $body = json_decode(file_get_contents('php://input'), true);
         return is_array($body) ? $body : [];
+    }
+
+    private function require_admin()
+    {
+        $auth = $this->api->require_jwt();
+        if (($auth['role'] ?? '') !== 'admin' || !in_array('products:write', $auth['scopes'] ?? [], true)) {
+            $this->api->respond_error('Administrator access is required to change products.', 403);
+        }
     }
 
     private function load_products()
