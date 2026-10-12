@@ -234,7 +234,7 @@ Modern frameworks often add layers of abstraction that benefit large enterprise 
 
 ### Product CRUD application
 
-Copy `.env.example` to `.env` for local development. Set `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the Aiven MySQL values. Generate separate random values of at least 32 characters for `JWT_SECRET` and `REFRESH_TOKEN_KEY`. Set `API_ALLOW_ORIGIN` to the frontend origin. Generate a password hash for the admin login with:
+Copy `.env.example` to `.env` for local development. Set `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, and `DB_NAME` to the Aiven MySQL values. Generate separate random values of at least 32 characters for `JWT_SECRET` and `REFRESH_TOKEN_KEY`. `API_ALLOW_ORIGIN` accepts a comma-separated list of frontend origins; keep the local Vite origin for development and include the deployed frontend origin. Generate a password hash for the admin login with:
 
 ```bash
 php -r "echo password_hash('change-this-password', PASSWORD_DEFAULT), PHP_EOL;"
@@ -253,7 +253,7 @@ The `MigrationController` routes reject HTTP requests and only serve LavaLust's 
 
 The API accepts `POST /api/login` with `{ "username": "...", "password": "..." }`. Send its returned access token as `Authorization: Bearer <token>` for product operations: `GET/POST /api/products` and `GET/PUT/PATCH/DELETE /api/products/{id}`. Both configured roles can view products; only the `admin` role can create, update, or delete them. This restriction is enforced by the API as well as by the frontend controls. The browser logout clears its stored token; access tokens remain valid until their configured expiration.
 
-For the React frontend, create a root `.env.local` with `VITE_API_URL=http://127.0.0.1:3000`, start LavaLust with `php lava serve`, then start Vite from the repository root with `npm run dev`. On Render, configure the backend environment variables in the service settings and use the `public` directory as the document root. Build and deploy the Vite frontend separately with `VITE_API_URL` set to the deployed API origin.
+For the React frontend, create a root `.env.local` with `VITE_API_URL=http://127.0.0.1:3000`, start LavaLust with `php lava serve`, then start Vite from the repository root with `npm run dev`. On Render, configure the backend environment variables in the service settings, set `API_ALLOW_ORIGIN` to include `https://product-frontend-rada15.vercel.app` (and any other frontend origins you use), and use the `public` directory as the document root. Build and deploy the Vite frontend separately with `VITE_API_URL` set to the deployed API origin.
 
 Full documentation is available at **[https://lavalust.netlify.app](https://lavalust.netlify.app)**
 
