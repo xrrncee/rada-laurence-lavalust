@@ -101,6 +101,10 @@ $config['allow_origin'] = $allowed_origins === '*'
     ? '*'
     : array_values(array_filter(array_map('trim', explode(',', $allowed_origins))));
 
+if (is_array($config['allow_origin']) && !in_array('https://product-frontend-rada15.vercel.app', $config['allow_origin'], true)) {
+    $config['allow_origin'][] = 'https://product-frontend-rada15.vercel.app';
+}
+
 /*
 |--------------------------------------------------------------------------
 | Refresh Token Table
