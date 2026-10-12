@@ -199,6 +199,7 @@ EOT;
                 $migration->up();
 
                 $this->record_migration($version);
+                $applied[] = $version;
                 $this->success("✓ Migrated: " . basename($file));
                 $migrated++;
             }

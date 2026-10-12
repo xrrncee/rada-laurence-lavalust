@@ -16,23 +16,18 @@ class Add_user_names {
             return;
         }
 
-        $this->_lava->dbforge->add_column('users', [
-            'firstname' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 100,
-                'null'       => FALSE,
-                'default'    => '',
-            ],
-        ]);
-
-        $this->_lava->dbforge->add_column('users', [
-            'lastname' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 100,
-                'null'       => FALSE,
-                'default'    => '',
-            ],
-        ]);
+        foreach (['firstname', 'lastname'] as $column) {
+            if (!$this->_lava->dbforge->column_exists('users', $column)) {
+                $this->_lava->dbforge->add_column('users', [
+                    $column => [
+                        'type'       => 'VARCHAR',
+                        'constraint' => 100,
+                        'null'       => FALSE,
+                        'default'    => '',
+                    ],
+                ]);
+            }
+        }
     }
 
     public function down()
